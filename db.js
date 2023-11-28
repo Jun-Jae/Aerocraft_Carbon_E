@@ -20,22 +20,53 @@ nunjucks.configure("views", {
 
 //mongodb connect
 mongoose
-  .connect("mongodb://localhost:27017/carbon_emissions")
-  .then(() => console.log("connected DB Successfully"))
-  .catch((err) => console.log(err));
+  .connect("mongodb://127.0.0.1:27017/carbon_emissions")
+  .then(() => console.log("DB 연결 성공"))
+  .catch(e => console.log(err));
 
-//mondodb setting
+//mondodb set
 const { Schema } = mongoose;
 
-const emission_factorSchema = new Schema({
+const InsertingSchema = new Schema ({ // Insert 스키마 구조 
+  Model : String,
+  tonCO2eq :  {
+    type : Number,
+    default : 0,
+  }
+})
+
+// Inserting Model의 경우 기존의 emission_factorSchema에 병합
+
+// Insert를 위한 코드 작성
+app.get('/insert', (req, res) => {
+  res.render('insert');
+});
+app.post('/insert', async (req, res) => {
+  // request 안에 있는 내용을 처리
+  // request.body
+  const insertYear = req.body.insertYear;
+  const insertData = req.body.insertData;
+  
+  // mongodb에 저장
+  const inserting = emission_factor({
+    insertYear : insertYear,
+    insertData : insertData
+  })
+  const result = await inserting.save().then(() => { // 객체에 생성된 data 저장
+      console.log('Success')
+      //res.render('detail', {title: title, contents: contents });
+  }) .catch((err) => {
+    console.error(err)
+    res.render('insert')
+  })
+});
+
+const emission_factorSchema = new Schema({ // 스키마의 구조 선언
   Model: String,
   tonCO2eq: Number,
 });
-const emission_factor = mongoose.model(
-  "emission_factor",
-  emission_factorSchema,
-  "emission_factor"
-);
+
+const emission_factor = mongoose.model("emission_factor",emission_factorSchema,"emission_factor");
 
 const Gas_emission_yearSchema = new Schema({
   year: Number,
