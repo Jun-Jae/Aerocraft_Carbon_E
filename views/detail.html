@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <title>연간 탄소 배출량</title>
+    <title>항공 탄소 배출량</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
 
@@ -34,13 +35,21 @@
     
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
-  </head>
 
+  <script>
+    function enableEditing() {
+      document.getElementById('modelName').readOnly = false;
+      document.getElementById('tonCO2eq').readOnly = false;
+    }
 
-  <body> 
+  </script>
+
+  <title>Detail Page</title>
+
+</head>
+<body>
   <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">
-      <i class="bi bi-airplane-engines"></i>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-airplane-engines" viewBox="0 0 16 16">
         <path d="M8 0c-.787 0-1.292.592-1.572 1.151A4.347 4.347 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 
         .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 
@@ -48,105 +57,76 @@
         0ZM7 3c0-.432.11-.979.322-1.401C7.542 1.159 7.787 1 8 1c.213 0 .458.158.678.599C8.889 2.02 9 2.569 9 3v4a.5.5 0 0 0 .276.447l5.448 2.724a.5.5 0 0 1 .276.447v.792l-5.418-.903a.5.5 0 0
         0-.575.41l-.5 3a.5.5 0 0 0 .14.437l.646.646H6.707l.647-.646a.5.5 0 0 0 .14-.436l-.5-3a.5.5 0 0 0-.576-.411L1 11.41v-.792a.5.5 0 0 1 .276-.447l5.448-2.724A.5.5 0 0 0 7 7V3Z"/>
       </svg>
-      Home
+      <i class="bi bi-airplane-engines"> Tech Rookie </i>
     </a>
     
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-
-  </header>
-
-  <div class="container-fluid">
-    <div class="row">
-        <div class="text-center pt-3 ">
-          <h1>AirCraft CO2 Emissions by Year</h1>
+</header>
+<body>
+    <form id = 'update' action="/edit" method="post" class="container mt-4">
+      <div class="col">
+        <div class="row">
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>Model Name</th>
+                <th>TonCO2eq</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <td> 
+                  <input type = 'text', name = 'modelName', id = 'modelName', value = '{{modelValue.Model}}'readOnly>
+                </td>
+                <td>
+                  <input type="text", name = 'tonCO2eq', id = 'tonCO2eq', value = ' {{modelValue.tonCO2eq }}' readonly>
+                </td>
+              </tr>
+            </tbody>
         </div>
+        <div class="col">
+          <button type="button" onclick="enableEditing()" >수정 모드</button>
+          <button id = 'submit'>update</button>
+          <form action="/delete/{{modelValue.id}}" method="post">
+            <button type="submit" value="delete">delete</button>
+          </form>
+      </div>
     </div>
-  </div>
-      
-      <!-- chart -->
-      <canvas id = "myChart"></canvas>
-      <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const jsonString = '{{ data | safe }}'; // Assuming Nunjucks supports this syntax
-        // Parse the JSON string
-        const serverData = JSON.parse(jsonString);
-
-            new Chart(ctx, {
-              type: 'line',
-              data: {
-                labels: serverData.map(item => item.year),
-                datasets: [{
-                  label: 'Greenhouse_Gas_Emissions_by_Year',
-                  data: serverData.map(item => item.tonCO2eq),
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1,
-                  fill: false
-                }]
-              },
-              options: {
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }
-            });
-      </script>
-
-              
-      <form id= "myForm" action = "/" method="post">
-        <label for = "title"></label>
-        <input type = "text" name ="model" id = title>
-        <input type="submit" value="submit">
-      </form>
-      <script>
-        document.getElementById("myForm").addEventListener("sumbit", function(event) {
-          const modelInput = document.getElementById("model");
-          const modelValue = modelInput.value;
-        
-        fetch('/', {
-          method : 'POST',
-          hearders: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({model : modelValue})
-        })
+  </form>
+  <script>
+    function update() {
+      const updateModelValue = document.getElementById('modelName').value;
+      const updateCO2Value = document.getElementById('tonCO2eq').value;
+      //const originModel = document.getElementById('').value;
+      fetch('/edit', {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json' //어떤 모델을 수정할 지 식별하는 id
+        },
+        body : JSON.stringify({
+          updateId: '{{modelValue.id}}',
+          updateModelValue:updateModelValue,
+          updateCO2Value:updateCO2Value
+        }),
+      })
         .then(Response => Response.json)
         .then(data => {
+          //서버 응답을 처리하는 코드
           console.log(data);
         })
         .catch(error => {
-          console.error('Error: ', error);
+          console.log('Error: ',error);
         });
+      }
+        document.getElementById('submit').addEventListener('click', function() {
+          update(); //수정된 데이터 전송
       });
-      </script>
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">YEAR</th>
-              <th scope="col">tonCO2eq</th>
-            </tr>
-          </thead>
-          
-          <tbody>
-            {%for chartlist in list%}
-            <tr>
-              <td><a href="/detail/{{chartlist.year}}" class="btn">{{chartlist.year}}</a>
-              </td>
-              <td>{{chartlist.tonCO2eq}}</td>
-            </tr>
-            {%endfor%}
-          </tbody>
-            
-
-
+  </script>
+</body>
   <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  
-  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>
