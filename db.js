@@ -60,17 +60,13 @@ app.post("/insert", async (req, res) => {
     Model: name,
     tonCO2eq: co2,
   });
-  const result = await inserting
-    .save()
-    .then(() => {
-      // 객체에 생성된 data 저장
-      console.log("Success");
-      res.redirect("/");
-      //res.render('detail', {title: title, contents: contents });
-    })
-    .catch((err) => {
+  const result = await inserting .save().then(() => { // 객체에 생성된 data 저장
+      console.log('Success')
+      res.redirect('/');
+      //res.render('update', {title: title, contents: contents });
+    }) .catch((err) => {
       console.error(err);
-    });
+    })
 });
 
 app.get("/", async (req, res) => {
@@ -103,9 +99,9 @@ app.post("/", async (req, res) => {
 
     // emission_factor.find()는 비동기 함수이므로 await를 사용
     const modelValue = await emission_factor.findOne({ Model: model });
-    // find가 성공하면 modelValue에 데이터가 들어있을 것이므로 그 값을 로그에 출력하고, detail 템플릿으로 전달
+    // find가 성공하면 modelValue에 데이터가 들어있을 것이므로 그 값을 로그에 출력하고, update 템플릿으로 전달
     console.log(modelValue);
-    res.render("detail", { modelValue: modelValue });
+    res.render("update_", { modelValue: modelValue });
   } catch (error) {
     // find에서 에러가 발생하면 catch 블록으로 이동하여 에러를 출력
     console.error(error);
@@ -113,7 +109,7 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.get("/detail/:model", async (req, res) => {
+app.get("/update_/:model", async (req, res) => {
   try {
     const model = req.params.model;
     const modelValue = await emission_factor.findOne({ Model: model });
@@ -123,7 +119,8 @@ app.get("/detail/:model", async (req, res) => {
     ]);
     console.log(chartAvg);
 
-    res.render("detail", { modelValue: modelValue });
+    res.render("update_", { modelValue: modelValue });
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");

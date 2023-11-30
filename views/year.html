@@ -67,7 +67,7 @@
   </div>
       
       <!-- chart -->
-      <canvas id = "myChart"></canvas>
+      <canvas id = "myChart" style="margin: 5vmin 5vmin;">
       <script>
         const ctx = document.getElementById('myChart').getContext('2d');
         const jsonString = '{{ data | safe }}'; // Assuming Nunjucks supports this syntax
@@ -95,7 +95,7 @@
               }
             });
       </script>
-
+      </canvas>
               
       <form id= "myForm" action = "/" method="post">
         <label for = "title"></label>
@@ -123,7 +123,8 @@
         });
       });
       </script>
-      <h2>Section title</h2>
+
+      <h1>Detailed Item</h1>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -136,7 +137,7 @@
           <tbody>
             {%for chartlist in list%}
             <tr>
-              <td><a href="/detail/{{chartlist.year}}" class="btn">{{chartlist.year}}</a>
+              <td><a href="/update_/{{chartlist.year}}" class="btn">{{chartlist.year}}</a>
               </td>
               <td>{{chartlist.tonCO2eq}}</td>
             </tr>
