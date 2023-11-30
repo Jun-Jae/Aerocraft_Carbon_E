@@ -41,6 +41,7 @@ const Gas_emission_yearSchema = new Schema({
   year: Number,
   tonCO2eq: Number,
 });
+
 const Gas_emission_year = mongoose.model(
   "Gas_emission_year",
   Gas_emission_yearSchema,

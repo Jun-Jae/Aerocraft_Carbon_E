@@ -14,7 +14,11 @@
       canvas {
         border: 1px solid #ccc;
       }
-      
+      .modal .modal-footer .exit{
+        padding-left: 3vmin;
+        padding-right: 3vmin;
+        
+      }
     </style>
 
     <!-- Bootstrap core CSS -->
@@ -178,33 +182,38 @@
         });
         </script>
     
-      <!--<div style="margin-left: 2vmin; font-size: 3vmin; padding: 0"> -->[Detailed Item]
-        <a href="#" class="btn" style="float: right;">
-          <button type="button" class="btn btn-outline-primary" style="float: right; margin-right: 2vmin; padding-left: 3vmin; padding-right: 3vmin;">
-            Delete
-          </button>
-        </a>
+      <div style="margin-left: 2vmin; font-size: 3vmin; padding: 0"> [Detailed Item]
+        <!-- Delete에 대한 모달 생성 및 기능 구현-->
+        <div class="btn position-relative">
+          <label class="link-group-item py-3 pe-5">
+            <a href="#deleteModal" class="btn d_modal" data-bs-toggle="modal">
+              <button type="button" class="btn btn-outline-primary" style="float: right; margin-right: 2vmin; padding-left: 3vmin; padding-right: 3vmin;">
+                Delete
+              </button>
+            </a>
+          </label>
+        </div>
 
-        <a href="/update_/{{chartlist.Model}}" class="btn" style="float: right;">
-          <button type="button" class="btn btn-outline-primary" style=" padding-left: 3vmin; padding-right: 3vmin;">
-            Update
-          </button>
-        </a>
-
+        <!-- Insert에 대한 Modal 생성 및 기능 구현-->
+        <div class="btn position-relative">
+          <label class="link-group-item py-3 pe-5">
+            <a class = "i_modal btn" href= "#insertModal"  data-bs-toggle="modal" >
+              <button type="button" class="btn btn-outline-primary" style="float: right; padding-left: 3vmin; padding-right: 3vmin;">
+                Insert
+              </button>
+            </a>
+          </label>
+        </div> 
+      </div>
         
-        <a href="insertModal" class="i_modal"  data-bs-toggle="modal" style = "float: right;">
-          <button type="button" class="btn btn-outline-primary" style="float: right; padding-left: 3vmin; padding-right: 3vmin;">
-             Insert
-          </button>
-        </a>
-        
-      <!--</div>-->
-        
+      <!-- Insert Modal -->
       <div class="modal" id="insertModal" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-lg">
             <div class="modal-header">
-              <h5 class="modal-title">Insert Data</h5> 
+              <strong>
+                <h3 class="modal-title" id="insertModalTitle">Insert Data</h3> 
+              </strong>
             </div> 
             <div class="modal-body">
               <form id = "insert" action="/insert" method="post">
@@ -214,12 +223,34 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+              <button type="button" class="exit btn btn-primary" data-bs-dismiss="modal">Exit</button>
             </div>
           </div>
         </div>
       </div>  
-
+      <!-- Delete Modal -->
+      <div class="modal" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content modal-lg">
+            <div class="modal-header">
+              <strong>
+                <h3 class="modal-title" id="insertModalTitle">Delete Data</h3> 
+              </strong>
+            </div> 
+            <div class="modal-body">
+              <form action="/delete/{{modelValue.id}}" method="post">
+                <input type = 'text', name = 'modelName', id = 'modelName', value = '{{modelValue.Model}}'>
+                <input type="text", name = 'tonCO2eq', id = 'tonCO2eq', value = ' {{modelValue.tonCO2eq }}'>
+                <button type="submit" value="delete">delete</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="exit btn btn-primary" data-bs-dismiss="modal">Exit</button>
+            </div>
+          </div>
+        </div>
+      </div>  
+    <!-- Table Section-->
     <div class="table-responsive" style="margin: 2vmin 2vmin;">
       <table class="table table-striped table-sm">
         <thead>
@@ -233,7 +264,7 @@
           {%for chartlist in list%}
           <tr>
             <td>
-              <a href="/update_/{{chartlist.Model}}" class="btn">{{chartlist.Model}}</a>
+              <a class="btn" href="/update_/{{chartlist.Model}}">{{chartlist.Model}}</a>
             </td>
             <td>{{chartlist.tonCO2eq}}</td>
           </tr>
