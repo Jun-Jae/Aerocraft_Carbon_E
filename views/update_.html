@@ -91,8 +91,8 @@
         <div class="col">
           <button type="button" onclick="enableEditing()" >수정 모드</button>
           <button id = 'submit'>update</button>
-      <form action="/delete/{{modelValue.id}}" method="post">
-            <button type="submit" value="delete">delete</button>
+          <form id="delete" action="/delete" method="post">
+            <button id="delete" type="submit" value="delete">delete</button>
           </form>
         </div>
     </div>
@@ -125,6 +125,34 @@
       }
         document.getElementById('submit').addEventListener('click', function() {
           update(); //수정된 데이터 전송
+      });
+
+      function Delete() {
+      const updateModelValue = document.getElementById('modelName').value;
+      const updateCO2Value = document.getElementById('tonCO2eq').value;
+      //const originModel = document.getElementById('').value;
+      fetch('/delete', {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json' //어떤 모델을 수정할 지 식별하는 id
+        },
+        body : JSON.stringify({
+          updateId: '{{modelValue.id}}',
+          updateModelValue:updateModelValue,
+          updateCO2Value:updateCO2Value
+        }),
+      })
+        .then(Response => Response.json)
+        .then(data => {
+          //서버 응답을 처리하는 코드
+          console.log(data);
+        })
+        .catch(error => {
+          console.log('Error: ',error);
+        });
+      }
+        document.getElementById('delete').addEventListener('click', function() {
+          Delete(); //수정된 데이터 전송
       });
   </script>
 

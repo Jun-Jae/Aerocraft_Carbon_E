@@ -132,17 +132,18 @@ app.get("/update_/:model", async (req, res) => {
   }
 });
 
-app.post("/delete/:id", async (req, res) => {
-  const id = req.params.id;
-  const deleteValue = await emission_factor
-    .deleteOne({ _id: id })
-    .then(() => {
-      console.log("delete Success : ", deleteValue);
+app.post("/delete", async (req, res) => {
+  
+  const updateId = req.body.updateId;
+  var deleteValue = await emission_factor.deleteOne({ _id: updateId })
+  .then(() => {
+      console.log("delete Success");
       res.redirect("/"); // URL의 경로를 Main으로 이동
     })
-    .catch((err) => {
+    .catch ((err) => {
       console.error(err);
     });
+  
 });
 
 app.post("/edit", async (req, res) => {
