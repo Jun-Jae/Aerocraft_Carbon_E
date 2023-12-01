@@ -61,13 +61,17 @@ app.post("/insert", async (req, res) => {
     Model: name,
     tonCO2eq: CO2,
   });
-  const result = await inserting .save().then(() => { // 객체에 생성된 data 저장
-      console.log('Success')
-      res.redirect('/');
+  const result = await inserting
+    .save()
+    .then(() => {
+      // 객체에 생성된 data 저장
+      console.log("Success");
+      res.redirect("/");
       //res.render('update', {title: title, contents: contents });
-    }) .catch((err) => {
-      console.error(err);
     })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 app.get("/", async (req, res) => {
@@ -122,7 +126,6 @@ app.get("/update_/:model", async (req, res) => {
     console.log(chartAvg);
 
     res.render("update_", { modelValue: modelValue });
-
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -131,7 +134,8 @@ app.get("/update_/:model", async (req, res) => {
 
 app.post("/delete/:id", async (req, res) => {
   const id = req.params.id;
-  const deleteValue = await emission_factor.deleteOne({ _id: id })
+  const deleteValue = await emission_factor
+    .deleteOne({ _id: id })
     .then(() => {
       console.log("delete Success : ", deleteValue);
       res.redirect("/"); // URL의 경로를 Main으로 이동
