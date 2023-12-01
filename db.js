@@ -52,14 +52,14 @@ app.post("/insert", async (req, res) => {
   // request 안에 있는 내용을 처리
   // request.body
   const name = req.body.Name;
-  const co2 = req.body.co2;
+  const CO2 = req.body.CO2;
 
   console.log(name);
-  console.log(co2);
+  console.log(CO2);
   // mongodb에 저장
   const inserting = emission_factor({
     Model: name,
-    tonCO2eq: co2,
+    tonCO2eq: CO2,
   });
   const result = await inserting .save().then(() => { // 객체에 생성된 data 저장
       console.log('Success')
@@ -115,6 +115,7 @@ app.get("/update_/:model", async (req, res) => {
     const model = req.params.model;
     const modelValue = await emission_factor.findOne({ Model: model });
     console.log(modelValue, " Success");
+
     let chartAvg = await emission_factor.aggregate([
       { $group: { _id: null, averageValue: { $avg: "$tonCO2eq" } } },
     ]);
@@ -130,11 +131,10 @@ app.get("/update_/:model", async (req, res) => {
 
 app.post("/delete/:id", async (req, res) => {
   const id = req.params.id;
-  const deleteValue = emission_factor
-    .deleteOne({ _id: id })
+  const deleteValue = await emission_factor.deleteOne({ _id: id })
     .then(() => {
       console.log("delete Success : ", deleteValue);
-      res.redirect("/");
+      res.redirect("/"); // URL의 경로를 Main으로 이동
     })
     .catch((err) => {
       console.error(err);

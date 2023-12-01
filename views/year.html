@@ -97,11 +97,6 @@
       </script>
       </canvas>
               
-      <form id= "myForm" action = "/" method="post">
-        <label for = "title"></label>
-        <input type = "text" name ="model" id = title>
-        <input type="submit" value="submit">
-      </form>
       <script>
         document.getElementById("myForm").addEventListener("sumbit", function(event) {
           const modelInput = document.getElementById("model");
@@ -124,8 +119,8 @@
       });
       </script>
 
-      <h1>Detailed Item</h1>
-      <div class="table-responsive">
+<div class="detail_line" style="margin-left: 2vmin; font-size: 3vmin; "> [Detailed Item] </div>
+      <div class="table-responsive" style="margin: 2vmin 2vmin; position: relative;">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
